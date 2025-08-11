@@ -1,1 +1,36 @@
+import telebot
+from bot_logic import gen_pass # импорт функции из файла
 
+# Замени 'TOKEN' на токен твоего бота
+# Этот токен ты получаешь от BotFather, чтобы бот мог работать
+bot = telebot.TeleBot("TOKEN")
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Привет! Я твой Telegram бот. Напиши что-нибудь!")
+    
+@bot.message_handler(commands=['hello'])
+def send_hello(message):
+    bot.reply_to(message, "Привет! Как дела?")
+    
+@bot.message_handler(commands=['bye'])
+def send_bye(message):
+    bot.reply_to(message, "Пока! Удачи!")
+
+# Генерация пароля
+@bot.message_handler(commands=['get_password'])
+def get_password_length(message):
+    bot.send_message(message.chat.id, 'Задайте длину пароля')
+    bot.register_next_step_handler(message, show_password) # следующий ввод текста
+    
+def show_password(message):
+        number = int(message.text)  # преобразуем в число
+        bot.reply_to(message, gen_pass(number)) # вызываем функцию генерации
+
+# возврат в чат того, что и послано
+
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, message.text)
+    
+bot.polling() # запуск бота
