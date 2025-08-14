@@ -1,18 +1,19 @@
 import telebot
 import random
 from bot_logic import gen_pass # импорт функции из файла
-
+from datetime import date
 # Замени 'TOKEN' на токен твоего бота
 # Этот токен ты получаешь от BotFather, чтобы бот мог работать
 bot = telebot.TeleBot("8351363146:AAHTWyJbgShUnf9JhpyaPR0tGNLtC2D9V5k")
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
+    bot.reply_to(message, "Cегодня "+str(date.today()))
     bot.reply_to(message, "Привет! Я твой Telegram бот. Напиши /help чтобы всё узнать!")
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.reply_to(message, "Привет! Я твой Telegram бот, у меня есть такие команды:\n"
+       bot.reply_to(message, "Привет! Я твой Telegram бот, у меня есть такие команды:\n"
     "/hello - печатает приветствие.\n"
     "/bye - печатает прощание.\n"
     "/get_password - выдаёт пароль, нужной длины.\n"
