@@ -1,17 +1,29 @@
 import telebot
+import random
 from bot_logic import gen_pass # импорт функции из файла
 
 # Замени 'TOKEN' на токен твоего бота
 # Этот токен ты получаешь от BotFather, чтобы бот мог работать
-bot = telebot.TeleBot("TOKEN")
+bot = telebot.TeleBot("8351363146:AAHTWyJbgShUnf9JhpyaPR0tGNLtC2D9V5k")
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Привет! Я твой Telegram бот. Напиши что-нибудь!")
+    bot.reply_to(message, "Привет! Я твой Telegram бот. Напиши /help чтобы всё узнать!")
+
+@bot.message_handler(commands=['help'])
+def send_help(message):
+    bot.reply_to(message, "Привет! Я твой Telegram бот, у меня есть такие команды:\n"
+    "/hello - печатает приветствие.\n"
+    "/bye - печатает прощание.\n"
+    "/get_password - выдаёт пароль, нужной длины.\n"
+    "/heh - печатает 'he' столько раз, какое количество написали.\n"
+    "/random - выдаёт случайное число.\n"
+    "/orel - случайным образом выбирает 'орёл' или 'решка'.\n"
+    "Если просто ввести что-нибудь, я отправлю тоже самое.\n") 
     
 @bot.message_handler(commands=['hello'])
 def send_hello(message):
-    bot.reply_to(message, "Привет! Как дела?")
+    bot.reply_to(message, "Привет!")
     
 @bot.message_handler(commands=['bye'])
 def send_bye(message):
@@ -27,7 +39,20 @@ def show_password(message):
         number = int(message.text)  # преобразуем в число
         bot.reply_to(message, gen_pass(number)) # вызываем функцию генерации
 
-# возврат в чат того, что и послано
+@bot.message_handler(commands=['heh'])
+def send_heh(message):
+    count_heh = int(message.text.split()[1]) if len(message.text.split()) > 1 else 5
+    bot.reply_to(message, "he" * count_heh)
+
+@bot.message_handler(commands=['random'])
+def send_random(message):
+    r = random.randint(1, 7)
+    bot.reply_to(message, r)
+
+@bot.message_handler(commands=['orel'])
+def send_random1(message):
+    r = random.choice(['орёл', 'решка'])
+    bot.reply_to(message, r)
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
